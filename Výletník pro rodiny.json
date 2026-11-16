@@ -1,0 +1,130 @@
+{
+  "name": "Výletník pro rodiny",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "80baf556-cb68-4b5e-97f7-d064f7d8f24d",
+      "name": "When chat message received",
+      "webhookId": "33d918d3-6767-4480-adec-5e9c29799773"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Jsi Výletník pro rodiny. Odpovídej česky.\n\nPřed každým doporučením výletu zavolej připojený nástroj Data Table a pracuj s výlety, které vrátí. Vyber nejvýše tři místa podle dotazu. U každého vysvětli, proč se hodí, a přidej odkaz ze sloupce zdroj.\n\nZohledni lokalitu, věk dětí, přístup s kočárkem a provozní podmínky. Pokud údaj chybí, řekni, že ho v databázi nemáš. Cena 0 Kč znamená vstup zdarma. Prázdná cena znamená neznámou cenu.\n\nPokud žádné místo nesplňuje všechny podmínky, řekni to."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "6e7dff7f-845f-47ed-8c79-4d684759d326",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        208
+      ],
+      "id": "02bb6a20-3dde-4bf3-aef6-3bbdc75b3ccf",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "l3bS9vM2cGmsl25K",
+          "mode": "list",
+          "cachedResultName": "vyletnik pro rodiny xlsx",
+          "cachedResultUrl": "/projects/Jgj80VadmnLbqIUg/datatables/l3bS9vM2cGmsl25K"
+        }
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        384,
+        208
+      ],
+      "id": "480c6966-3c2f-40a6-b3fe-bc1caf0cd233",
+      "name": "Get row(s) in Data table"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in Data table": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c69d23ed-eb72-4deb-9488-9c85737e34a0",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ded9a2e7d5bfb1bc7b2e8361979c6a8eba3107837170ad8263bd6d60c5881f71"
+  },
+  "nodeGroups": [],
+  "id": "Xh4j09erNhJvY7BH",
+  "tags": []
+}
